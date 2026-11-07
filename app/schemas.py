@@ -21,6 +21,11 @@ class LeadResponse(BaseModel):
     service_type: str
     message: str
     urgency: LeadUrgency
+    #intelligence fields start
+    customer_intent: str
+    recommended_action: str
+    requires_human_review: bool
+    #intelligence fields end
     status: LeadStatus
     created_at: datetime
 

@@ -3,6 +3,7 @@ from fastapi import FastAPI
 from app.database import engine, Base
 from app import models
 from app.routes import router as lead_router
+from app.dashboard import router as dashboard_router
 
 Base.metadata.create_all(bind=engine)
 

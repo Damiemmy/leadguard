@@ -57,6 +57,27 @@ class Lead(Base):
         nullable=False
     )
 
+    #--intelligence fields start
+
+    customer_intent: Mapped[str] = mapped_column(
+    String(100),
+    default="general_enquiry",
+    nullable=False
+)
+
+    recommended_action: Mapped[str] = mapped_column(
+        Text,
+        default="Contact the customer",
+        nullable=False
+    )
+
+    requires_human_review: Mapped[bool] = mapped_column(
+        default=False,
+        nullable=False
+    )
+
+    #--intelligence fields end
+
     status: Mapped[LeadStatus] = mapped_column(
         SQLEnum(LeadStatus),
         default=LeadStatus.NEW,
