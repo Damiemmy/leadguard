@@ -3,6 +3,7 @@ from pydantic import BaseModel, ConfigDict, Field
 
 from app.models import LeadStatus, LeadUrgency
 
+from app.models import LeadStatus, LeadUrgency, FollowUpStatus
 
 class LeadCreate(BaseModel):
     customer_name: str = Field(min_length=2, max_length=150)
@@ -27,6 +28,25 @@ class LeadResponse(BaseModel):
     requires_human_review: bool
     #intelligence fields end
     status: LeadStatus
+    created_at: datetime
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class LeadStatusUpdate(BaseModel):
+    status: LeadStatus
+
+
+class FollowUpStatusUpdate(BaseModel):
+    status: FollowUpStatus
+
+
+class FollowUpResponse(BaseModel):
+    id: int
+    lead_id: int
+    message: str
+    scheduled_for: datetime
+    status: FollowUpStatus
     created_at: datetime
 
     model_config = ConfigDict(from_attributes=True)

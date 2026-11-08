@@ -1,0 +1,550 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LeadGuard | Command Centre</title>
+
+    <style>
+        :root {
+            --bg: #f5f7fb;
+            --surface: #ffffff;
+            --text: #182230;
+            --muted: #667085;
+            --border: #e5eaf1;
+            --primary: #4f46e5;
+            --red: #dc2626;
+            --green: #15803d;
+            --orange: #c2410c;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Inter, Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        aside {
+            width: 235px;
+            background: #151b2b;
+            color: white;
+            padding: 28px 20px;
+            flex-shrink: 0;
+        }
+
+        .brand {
+            font-size: 23px;
+            font-weight: 800;
+            margin-bottom: 45px;
+        }
+
+        .brand span {
+            color: #818cf8;
+        }
+
+        .nav-label {
+            color: #98a2b3;
+            font-size: 11px;
+            text-transform: uppercase;
+            margin-bottom: 14px;
+        }
+
+        .nav-item {
+            padding: 13px;
+            border-radius: 9px;
+            background: #29324a;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .sidebar-note {
+            margin-top: 40px;
+            color: #aab3c5;
+            font-size: 12px;
+            line-height: 1.7;
+        }
+
+        main {
+            flex: 1;
+            min-width: 0;
+            padding: 32px;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 26px;
+            margin-bottom: 7px;
+        }
+
+        .subtitle {
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        button {
+            border: 0;
+            background: var(--primary);
+            color: white;
+            border-radius: 8px;
+            padding: 11px 17px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: wait;
+        }
+
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 17px;
+            margin-bottom: 24px;
+        }
+
+        .metric, .panel {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 13px;
+            padding: 21px;
+        }
+
+        .metric-label {
+            color: var(--muted);
+            font-size: 13px;
+            margin-bottom: 15px;
+        }
+
+        .metric-value {
+            font-size: 30px;
+            font-weight: 750;
+        }
+
+        .metric-description {
+            color: var(--muted);
+            font-size: 12px;
+            margin-top: 8px;
+        }
+
+        .danger {
+            color: var(--red);
+        }
+
+        .success {
+            color: var(--green);
+        }
+
+        .warning {
+            color: var(--orange);
+        }
+
+        .panel {
+            margin-bottom: 22px;
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .panel-header h2 {
+            font-size: 17px;
+        }
+
+        .panel-header span {
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            min-width: 650px;
+        }
+
+        th {
+            font-size: 11px;
+            color: var(--muted);
+            text-transform: uppercase;
+            padding: 13px 10px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        td {
+            font-size: 13px;
+            padding: 16px 10px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .pill {
+            display: inline-block;
+            padding: 5px 9px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: capitalize;
+        }
+
+        .high {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+        .medium {
+            background: #ffedd5;
+            color: #c2410c;
+        }
+
+        .low {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .status {
+            background: #eef2ff;
+            color: #4338ca;
+        }
+
+        .review {
+            color: var(--red);
+            font-weight: 700;
+        }
+
+        .empty, .message {
+            padding: 25px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        footer {
+            color: var(--muted);
+            text-align: center;
+            font-size: 12px;
+            padding: 10px;
+        }
+
+        @media (max-width: 1000px) {
+            .metrics {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 650px) {
+            aside {
+                display: none;
+            }
+
+            main {
+                padding: 19px 14px;
+            }
+
+            .topbar {
+                align-items: flex-start;
+            }
+
+            h1 {
+                font-size: 21px;
+            }
+
+            .metrics {
+                gap: 10px;
+            }
+
+            .metric {
+                padding: 15px;
+            }
+
+            .metric-value {
+                font-size: 25px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<div class="layout">
+
+    <aside>
+        <div class="brand">Lead<span>Guard</span></div>
+
+        <div class="nav-label">Workspace</div>
+        <div class="nav-item">▦ &nbsp; Command Centre</div>
+
+        <div class="sidebar-note">
+            Recover opportunities.<br>
+            Respond faster.<br>
+            Grow your business.
+        </div>
+    </aside>
+
+    <main>
+        <div class="topbar">
+            <div>
+                <h1>Command Centre</h1>
+                <p class="subtitle">
+                    Monitor enquiries and protect your business opportunities.
+                </p>
+            </div>
+
+            <button id="refreshBtn" onclick="loadDashboard()">
+                Refresh data
+            </button>
+        </div>
+
+        <div id="message" class="message">Loading your dashboard...</div>
+
+        <section class="metrics">
+            <div class="metric">
+                <div class="metric-label">Total leads</div>
+                <div class="metric-value" id="totalLeads">—</div>
+                <div class="metric-description">All recorded enquiries</div>
+            </div>
+
+            <div class="metric">
+                <div class="metric-label">Urgent leads</div>
+                <div class="metric-value danger" id="urgentLeads">—</div>
+                <div class="metric-description">Require priority attention</div>
+            </div>
+
+            <div class="metric">
+                <div class="metric-label">Pending follow-ups</div>
+                <div class="metric-value warning" id="pendingFollowups">—</div>
+                <div class="metric-description">Outstanding follow-up tasks</div>
+            </div>
+
+            <div class="metric">
+                <div class="metric-label">Booked jobs</div>
+                <div class="metric-value success" id="bookedLeads">—</div>
+                <div class="metric-description">Leads marked as booked</div>
+            </div>
+        </section>
+
+        <section class="metrics">
+            <div class="metric">
+                <div class="metric-label">New enquiries</div>
+                <div class="metric-value" id="newLeads">—</div>
+            </div>
+
+            <div class="metric">
+                <div class="metric-label">Human review required</div>
+                <div class="metric-value danger" id="reviewLeads">—</div>
+            </div>
+
+            <div class="metric">
+                <div class="metric-label">Overdue follow-ups</div>
+                <div class="metric-value warning" id="overdueFollowups">—</div>
+            </div>
+
+            <div class="metric">
+                <div class="metric-label">API connection</div>
+                <div class="metric-value success" style="font-size:20px">
+                    Connected
+                </div>
+                <div class="metric-description">Dashboard data loaded successfully</div>
+            </div>
+        </section>
+
+        <section class="panel">
+            <div class="panel-header">
+                <h2>Recent enquiries</h2>
+                <span>Latest 10 leads</span>
+            </div>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Customer</th>
+                            <th>Service</th>
+                            <th>Urgency</th>
+                            <th>Status</th>
+                            <th>Intent</th>
+                            <th>Review</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leadsTable">
+                        <tr>
+                            <td colspan="6" class="empty">Loading enquiries...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="panel">
+            <div class="panel-header">
+                <h2>Operational priorities</h2>
+                <span>Recommended actions</span>
+            </div>
+
+            <div id="priorities" class="empty">
+                Loading priorities...
+            </div>
+        </section>
+
+        <footer>
+            LeadGuard Command Centre · Lead recovery and automation
+        </footer>
+    </main>
+</div>
+
+<script>
+    const escapeHTML = (value) => String(value ?? "").replace(
+        /[&<>"']/g,
+        character => ({
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '"': "&quot;",
+            "'": "&#039;"
+        })[character]
+    );
+
+    async function loadDashboard() {
+        const button = document.getElementById("refreshBtn");
+        const message = document.getElementById("message");
+
+        button.disabled = true;
+        button.textContent = "Refreshing...";
+
+        try {
+            const response = await fetch("/dashboard/summary");
+
+            if (!response.ok) {
+                throw new Error("Unable to retrieve dashboard data.");
+            }
+
+            const data = await response.json();
+
+            document.getElementById("totalLeads").textContent =
+                data.total_leads;
+
+            document.getElementById("urgentLeads").textContent =
+                data.urgent_leads;
+
+            document.getElementById("pendingFollowups").textContent =
+                data.pending_followups;
+
+            document.getElementById("bookedLeads").textContent =
+                data.booked_leads;
+
+            document.getElementById("newLeads").textContent =
+                data.new_leads;
+
+            document.getElementById("reviewLeads").textContent =
+                data.leads_requiring_review;
+
+            document.getElementById("overdueFollowups").textContent =
+                data.overdue_followups;
+
+            renderLeads(data.recent_leads || []);
+            renderPriorities(data.recent_leads || []);
+
+            message.textContent = "Dashboard updated successfully.";
+        } catch (error) {
+            message.textContent = error.message;
+            message.className = "message danger";
+        } finally {
+            button.disabled = false;
+            button.textContent = "Refresh data";
+        }
+    }
+
+    function renderLeads(leads) {
+        const table = document.getElementById("leadsTable");
+
+        if (!leads.length) {
+            table.innerHTML = `
+                <tr>
+                    <td colspan="6" class="empty">
+                        No enquiries have been received yet.
+                    </td>
+                </tr>
+            `;
+            return;
+        }
+
+        table.innerHTML = leads.map(lead => `
+            <tr>
+                <td>
+                    <strong>${escapeHTML(lead.customer_name)}</strong><br>
+                    ${escapeHTML(lead.phone_number)}
+                </td>
+                <td>${escapeHTML(lead.service_type)}</td>
+                <td>
+                    <span class="pill ${escapeHTML(lead.urgency)}">
+                        ${escapeHTML(lead.urgency)}
+                    </span>
+                </td>
+                <td>
+                    <span class="pill status">
+                        ${escapeHTML(lead.status)}
+                    </span>
+                </td>
+                <td>${escapeHTML(lead.customer_intent)}</td>
+                <td>
+                    ${lead.requires_human_review
+                        ? '<span class="review">Required</span>'
+                        : 'No'}
+                </td>
+            </tr>
+        `).join("");
+    }
+
+    function renderPriorities(leads) {
+        const container = document.getElementById("priorities");
+
+        const urgent = leads.filter(
+            lead => lead.urgency === "high"
+        );
+
+        if (!urgent.length) {
+            container.textContent =
+                "No urgent enquiries in the latest 10 leads.";
+            return;
+        }
+
+        container.innerHTML = urgent.map(lead => `
+            <div style="padding:12px 0; border-bottom:1px solid #e5eaf1">
+                <strong>${escapeHTML(lead.customer_name)}</strong>
+                <span class="pill high">High priority</span>
+                <p style="margin-top:7px; font-size:13px">
+                    ${escapeHTML(lead.recommended_action)}
+                </p>
+            </div>
+        `).join("");
+    }
+
+    loadDashboard();
+</script>
+</body>
+</html>
